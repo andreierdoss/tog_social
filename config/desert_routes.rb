@@ -28,8 +28,8 @@ namespace(:member) do |member|
   end
   member.with_options(:controller => 'sharings') do |sharing|
     sharing.share '/share/:shareable_type/:shareable_id', :action => 'index'
-    sharing.share_with_group '/group/:id/share/:shareable_type/:shareable_id', :action => 'share'
-    sharing.remove_share_from_group '/group/:id/remove/:shareable_id', :action => 'remove'
+    sharing.share_with_group '/group/:id/share/:shareable_type/:shareable_id', :action => 'create'
+    sharing.remove_share_from_group '/group/:id/remove/:shareable_type/:shareable_id', :action => 'destroy'
   end
 end
 

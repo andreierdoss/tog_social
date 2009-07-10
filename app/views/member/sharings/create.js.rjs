@@ -1,0 +1,4 @@
+page.replace_html "sharings_group_#{@group.id}", remove_share_link(@group, params[:shareable_type], params[:shareable_id])
+page.visual_effect :highlight, "sharings_group_#{@group.id}", :duration => 2
+
+

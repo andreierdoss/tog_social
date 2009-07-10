@@ -10,9 +10,9 @@
     <div class="left_col">
       <% left_col.each do |group|%>
         <div class="moduleA round">
-            <div class="title">	
-						  <%= share_link(image_for_group(group, 'small'), group, @shareable) %>
-							<%= share_link(group.name, group, @shareable) %>
+            <div class="title">
+              <%= image_for_group(group, 'small') %> <%= group.name %><br/>
+              <%= sharings_link(group, @shareable) %>
             </div>    
         </div> 
         <br />   
@@ -23,8 +23,8 @@
       <% right_col.each do |group|%>
         <div class="moduleA round">
             <div class="title">
-						  <%= share_link(image_for_group(group, 'small'), group, @shareable) %>
-							<%= share_link(group.name, group, @shareable) %>
+              <%= image_for_group(group, 'small') %><%= group.name %><br/>
+	            <%= sharings_link(group, @shareable) %>
 						</div>    
         </div> 
         <br />   

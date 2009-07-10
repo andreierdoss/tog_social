@@ -110,6 +110,10 @@ class Group < ActiveRecord::Base
     return true
   end
   
+  def shared?(object)
+    self.sharings.count(:conditions => {:shareable_type => object.class.to_s, :shareable_id => object.id})  > 0
+  end
+  
   def creation_date(format=:short)
     I18n.l(self.created_at, :format => format)
   end

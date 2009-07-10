@@ -13,37 +13,35 @@ class Member::SharingsController < Member::BaseController
     end    
   end
 
-  def share
+  def create
     if @group.members.include? current_user
-      if @group.share(current_user, params[:shareable_type], params[:shareable_id])
-        message = I18n.t("tog_social.groups.site.shared_ok", :name => @group.name)
-        html_class = 'notice ok'
-      else
-        message = I18n.t("tog_social.groups.site.shared_nok", :name => @group.name)
-        html_class = 'notice'
-      end
+      @group.share(current_user, params[:shareable_type], params[:shareable_id])
       respond_to do |format|
-         format.html { render :text => "<div class=\"#{html_class}\">#{message}</div>"}
+         format.js
          format.xml  { render :xml => message, :head => :ok }
-      end
-    else
-      respond_to do |format|
-         format.html { render :text => "<div class=\"notice error\">#{I18n.t("tog_social.groups.site.not_member")}</div>"}
-         format.xml  { render :xml => I18n.t("tog_social.groups.site.not_member"), :head => :error }
       end
     end
   end
   
-  def remove
+  def destroy
+    @shared = @group.sharings.find :first, 
+      :conditions => {:group_id => params[:id], :shareable_type => params[:shareable_type], :shareable_id => params[:shareable_id]}
     if @group.moderators.include? current_user 
-      @shared = @group.sharings.find :first, :conditions => {:group_id => params[:id], :shareable_id => params[:shareable_id]}
-      if @shared != nil        
-        if @shared.destroy          
-          flash[:ok] = I18n.t("tog_social.sharings.removed_shared_ok")
+      unless @shared == nil
+        if @shared.destroy         
+          flash[:ok] = I18n.t("tog_social.sharings.remove_share_ok")
           respond_to do |format|
             format.html { redirect_back_or_default(Tog::Config["plugins.tog_user.default_redirect_on_login"]) }
             format.xml
           end
+        end
+      end
+    elsif @group.members.include? current_user
+      unless @shared == nil        
+        @shared.destroy          
+        respond_to do |format|
+           format.js
+           format.xml  { render :xml => message, :head => :ok }
         end
       end
     end
